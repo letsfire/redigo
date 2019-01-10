@@ -21,7 +21,7 @@ func BenchmarkAloneMode_Sub(b *testing.B) {
 	go aRegido.Sub(func(c redis.PubSubConn) (err error) {
 		c.Subscribe(channel)
 		for {
-			switch msg := c.Receive().(type) {
+			switch msg := c.ReceiveWithTimeout(0).(type) {
 			case redis.Subscription:
 				notifyChan <- true
 			case redis.Message:
