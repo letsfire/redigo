@@ -7,6 +7,7 @@ import (
 	
 	"github.com/gomodule/redigo/redis"
 	"github.com/letsfire/redigo/mode/alone"
+	"github.com/letsfire/redigo/mode/cluster"
 	"github.com/letsfire/redigo/mode/sentinel"
 )
 
@@ -84,6 +85,28 @@ func BenchmarkSentinelMode_Exec(b *testing.B) {
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			res, err := sRedigo.String(func(c redis.Conn) (res interface{}, err error) {
+				return c.Do("ECHO", echoStr)
+			})
+			if err != nil {
+				b.Errorf("exec failed, err = %s", err)
+			} else if res != echoStr {
+				b.Errorf("unexpected result, expect = %s, but = %s", echoStr, res)
+			}
+		}
+	})
+}
+
+func BenchmarkClusterMode_Exec(b *testing.B) {
+	echoStr := "hello world"
+	cRedigo := New(cluster.New(
+		cluster.Nodes([]string{
+			"192.168.0.110:30001", "192.168.0.110:30002", "192.168.0.110:30003",
+			"192.168.0.110:30004", "192.168.0.110:30005", "192.168.0.110:30006",
+		}),
+	))
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			res, err := cRedigo.String(func(c redis.Conn) (res interface{}, err error) {
 				return c.Do("ECHO", echoStr)
 			})
 			if err != nil {
