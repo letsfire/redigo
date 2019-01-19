@@ -11,14 +11,14 @@
 | cluster 集群模式             | 100%       | 100%       | [mna/redisc](https://github.com/mna/redisc)             |
 
 
-### 方法列表
+### 方法说明
 ------------
 
-订阅连接 `type SubFunc func(c redis.PubSubConn) (err error)`  
-普通连接 `type ExecFunc func(c redis.Conn) (res interface{}, err error)`  
-
-* Sub(fn SubFunc) (err error)
-* Exec(fn ExecFunc) (interface{}, error)
+* 订阅命令方法定义 `type SubFunc func(c redis.PubSubConn) (err error)`
+* 普通命令方法定义 `type ExecFunc func(c redis.Conn) (res interface{}, err error)`
+* 执行订阅回调方法 Sub(fn SubFunc) (err error)
+* 执行命令回调方法 Exec(fn ExecFunc) (interface{}, error)
+* 下列方法都是封装了Exec方法，格式化返回值的类型
 * Int(fn ExecFunc) (int, error)
 * Ints(fn ExecFunc) ([]int, error)
 * IntMap(fn ExecFunc) (map[string]int, error)
@@ -90,26 +90,9 @@ var echoStr = "hello world"
     
 var sentinelMode = sentinel.New(
     sentinel.Addrs([]string{"192.168.0.110:26379"}),
-    sentinel.PoolOpts(
-        mode.MaxActive(0),       // 最大连接数，默认0无限制
-        mode.MaxIdle(0),         // 最多保持空闲连接数，默认2*runtime.GOMAXPROCS(0)
-        mode.Wait(false),        // 连接耗尽时是否等待，默认false
-        mode.IdleTimeout(0),     // 空闲连接超时时间，默认0不超时
-        mode.MaxConnLifetime(0), // 连接的生命周期，默认0不失效
-        mode.TestOnBorrow(nil),  // 空间连接取出后检测是否健康，默认nil
-    ),
-    sentinel.DialOpts(
-        redis.DialReadTimeout(time.Second),    // 读取超时，默认time.Second
-        redis.DialWriteTimeout(time.Second),   // 写入超时，默认time.Second
-        redis.DialConnectTimeout(time.Second), // 连接超时，默认500*time.Millisecond
-        redis.DialPassword(""),                // 鉴权密码，默认空
-        redis.DialDatabase(0),                 // 数据库号，默认0
-        redis.DialKeepAlive(time.Minute*5),    // 默认5*time.Minute
-        redis.DialNetDial(nil),                // 自定义dial，默认nil
-        redis.DialUseTLS(false),               // 是否用TLS，默认false
-        redis.DialTLSSkipVerify(false),        // 服务器证书校验，默认false
-        redis.DialTLSConfig(nil),              // 默认nil，详见tls.Config
-    ),
+    // 这两项配置和Alone模式完全相同
+    // sentinel.PoolOpts(...),
+    // sentinel.DialOpts(...),
     // 连接哨兵配置，用法于sentinel.DialOpts()一致
     // 默认未配置的情况则直接使用sentinel.DialOpts()的配置
     // sentinel.SentinelDialOpts()
@@ -140,26 +123,9 @@ var clusterMode = cluster.New(
         "192.168.0.110:30001", "192.168.0.110:30002", "192.168.0.110:30003",
         "192.168.0.110:30004", "192.168.0.110:30005", "192.168.0.110:30006",
     }),
-    cluster.PoolOpts(
-        mode.MaxActive(0),       // 最大连接数，默认0无限制
-        mode.MaxIdle(0),         // 最多保持空闲连接数，默认2*runtime.GOMAXPROCS(0)
-        mode.Wait(false),        // 连接耗尽时是否等待，默认false
-        mode.IdleTimeout(0),     // 空闲连接超时时间，默认0不超时
-        mode.MaxConnLifetime(0), // 连接的生命周期，默认0不失效
-        mode.TestOnBorrow(nil),  // 空间连接取出后检测是否健康，默认nil
-    ),
-    cluster.DialOpts(
-        redis.DialReadTimeout(time.Second),    // 读取超时，默认time.Second
-        redis.DialWriteTimeout(time.Second),   // 写入超时，默认time.Second
-        redis.DialConnectTimeout(time.Second), // 连接超时，默认500*time.Millisecond
-        redis.DialPassword(""),                // 鉴权密码，默认空
-        redis.DialDatabase(0),                 // 数据库号，默认0
-        redis.DialKeepAlive(time.Minute*5),    // 默认5*time.Minute
-        redis.DialNetDial(nil),                // 自定义dial，默认nil
-        redis.DialUseTLS(false),               // 是否用TLS，默认false
-        redis.DialTLSSkipVerify(false),        // 服务器证书校验，默认false
-        redis.DialTLSConfig(nil),              // 默认nil，详见tls.Config
-    ),
+    // 这两项配置和Alone模式完全相同
+    // cluster.PoolOpts(...),
+    // cluster.DialOpts(...),
 )
 
 var instance = redigo.New(clusterMode)

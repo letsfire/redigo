@@ -1,8 +1,6 @@
 package redigo
 
 import (
-	"log"
-	
 	"github.com/gomodule/redigo/redis"
 	"github.com/letsfire/redigo/mode"
 )
@@ -19,7 +17,7 @@ func New(mode mode.IMode) *Redigo {
 func (r *Redigo) Sub(fn SubFunc) (err error) {
 	conn, err := r.mode.NewConn()
 	if err != nil {
-		return err
+		return
 	}
 	psConn := redis.PubSubConn{Conn: conn}
 	err = fn(psConn)
@@ -37,7 +35,6 @@ func (r *Redigo) Exec(fn ExecFunc) (res interface{}, err error) {
 		} else if nconn, nerr := r.mode.NewConn(); nerr != nil {
 			return
 		} else {
-			log.Printf("use new connection after error = %s", err)
 			res, err = fn(nconn)
 			nconn.Close()
 		}
