@@ -23,6 +23,7 @@ func (sm *sentinelMode) NewConn() (redis.Conn, error) {
 
 func New(optFuncs ...OptFunc) mode.IMode {
 	opts := options{
+		addrs:      []string{"127.0.0.1:26379"},
 		masterName: "mymaster",
 		poolOpts:   mode.DefaultPoolOpts(),
 		dialOpts:   mode.DefaultDialOpts(),
