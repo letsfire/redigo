@@ -18,6 +18,7 @@
 * 普通命令方法定义 `type ExecFunc func(c redis.Conn) (res interface{}, err error)`
 * 执行订阅回调方法 Sub(fn SubFunc) (err error)
 * 执行命令回调方法 Exec(fn ExecFunc) (interface{}, error)
+* 返回当前模式名称 Mode() string
 * 下列方法都是封装了Exec方法，格式化返回值的类型
 * Int(fn ExecFunc) (int, error)
 * Ints(fn ExecFunc) ([]int, error)
