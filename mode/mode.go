@@ -10,6 +10,7 @@ import (
 type IMode interface {
 	GetConn() redis.Conn
 	NewConn() (redis.Conn, error)
+	String() string
 }
 
 type PoolOption func(pool *redis.Pool)

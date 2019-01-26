@@ -18,6 +18,10 @@ func (cm *clusterMode) NewConn() (redis.Conn, error) {
 	return cm.rc.Dial()
 }
 
+func (cm *clusterMode) String() string {
+	return "cluster"
+}
+
 var _ mode.IMode = &clusterMode{}
 
 func New(optFuncs ...OptFunc) *clusterMode {

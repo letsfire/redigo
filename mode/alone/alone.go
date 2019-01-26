@@ -17,6 +17,10 @@ func (sam *standAloneMode) NewConn() (redis.Conn, error) {
 	return sam.pool.Dial()
 }
 
+func (sam *standAloneMode) String() string {
+	return "alone"
+}
+
 var _ mode.IMode = &standAloneMode{}
 
 func New(optFuncs ...OptFunc) *standAloneMode {

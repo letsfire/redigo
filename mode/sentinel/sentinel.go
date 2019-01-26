@@ -21,6 +21,10 @@ func (sm *sentinelMode) NewConn() (redis.Conn, error) {
 	return sm.pool.Dial()
 }
 
+func (sm *sentinelMode) String() string {
+	return "sentinel"
+}
+
 var _ mode.IMode = &sentinelMode{}
 
 func New(optFuncs ...OptFunc) *sentinelMode {

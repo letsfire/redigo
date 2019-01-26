@@ -14,6 +14,10 @@ func New(mode mode.IMode) *Redigo {
 	return &Redigo{mode: mode}
 }
 
+func (r *Redigo) Mode() string {
+	return r.mode.String()
+}
+
 func (r *Redigo) Sub(fn SubFunc) (err error) {
 	conn, err := r.mode.NewConn()
 	if err != nil {
