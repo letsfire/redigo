@@ -4,7 +4,7 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
-	
+
 	"github.com/gomodule/redigo/redis"
 	"github.com/letsfire/redigo/mode/alone"
 	"github.com/letsfire/redigo/mode/cluster"

@@ -3,7 +3,7 @@ package sentinel
 import (
 	"runtime"
 	"time"
-	
+
 	"github.com/FZambia/sentinel"
 	"github.com/gomodule/redigo/redis"
 	"github.com/letsfire/redigo/mode"
@@ -21,7 +21,9 @@ func (sm *sentinelMode) NewConn() (redis.Conn, error) {
 	return sm.pool.Dial()
 }
 
-func New(optFuncs ...OptFunc) mode.IMode {
+var _ mode.IMode = &sentinelMode{}
+
+func New(optFuncs ...OptFunc) *sentinelMode {
 	opts := options{
 		addrs:      []string{"127.0.0.1:26379"},
 		masterName: "mymaster",

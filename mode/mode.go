@@ -3,7 +3,7 @@ package mode
 import (
 	"runtime"
 	"time"
-	
+
 	"github.com/gomodule/redigo/redis"
 )
 
