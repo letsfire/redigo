@@ -17,7 +17,9 @@ func (sam *standAloneMode) NewConn() (redis.Conn, error) {
 	return sam.pool.Dial()
 }
 
-func New(optFuncs ...OptFunc) mode.IMode {
+var _ mode.IMode = &standAloneMode{}
+
+func New(optFuncs ...OptFunc) *standAloneMode {
 	opts := options{
 		addr:     "127.0.0.1:6379",
 		dialOpts: mode.DefaultDialOpts(),

@@ -18,7 +18,9 @@ func (cm *clusterMode) NewConn() (redis.Conn, error) {
 	return cm.rc.Dial()
 }
 
-func New(optFuncs ...OptFunc) mode.IMode {
+var _ mode.IMode = &clusterMode{}
+
+func New(optFuncs ...OptFunc) *clusterMode {
 	opts := options{
 		nodes: []string{
 			"127.0.0.1:30001", "127.0.0.1:30002", "127.0.0.1:30003",
