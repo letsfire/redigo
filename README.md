@@ -8,7 +8,7 @@
 | :--------------------------- | :--------: | :--------: | :------------------------------------------------------ |
 | alone 单例，Twemproxy，Codis | 100%       | 100%       |                                                         |
 | sentinel 哨兵模式            | 100%       | 100%       | [FZambia/sentinel](https://github.com/FZambia/sentinel) |
-| cluster 集群模式             | 100%       | 100%       | [mna/redisc](https://github.com/mna/redisc)             |
+| cluster 集群模式             | 100%       | 100%       | [letsfire/redisc](https://github.com/letsfire/redisc)   |
 
 
 ### 方法说明

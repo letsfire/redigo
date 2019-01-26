@@ -3,7 +3,7 @@ package cluster
 import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/letsfire/redigo/mode"
-	"github.com/mna/redisc"
+	"github.com/letsfire/redisc"
 )
 
 type clusterMode struct {
