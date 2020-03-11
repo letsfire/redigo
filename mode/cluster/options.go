@@ -2,12 +2,14 @@ package cluster
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"github.com/letsfire/redigo/mode"
+	"github.com/letsfire/redigo"
+	"time"
 )
 
 type options struct {
 	nodes    []string
-	poolOpts []mode.PoolOption
+	waitTime time.Duration
+	poolOpts []redigo.PoolOption
 	dialOpts []redis.DialOption
 }
 
@@ -19,7 +21,13 @@ func Nodes(value []string) OptFunc {
 	}
 }
 
-func PoolOpts(value ...mode.PoolOption) OptFunc {
+func WaitTime(value time.Duration) OptFunc {
+	return func(opts *options) {
+		opts.waitTime = value
+	}
+}
+
+func PoolOpts(value ...redigo.PoolOption) OptFunc {
 	return func(opts *options) {
 		for _, poolOpt := range value {
 			opts.poolOpts = append(opts.poolOpts, poolOpt)

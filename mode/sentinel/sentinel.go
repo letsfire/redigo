@@ -1,12 +1,12 @@
 package sentinel
 
 import (
+	"github.com/letsfire/redigo"
 	"runtime"
 	"time"
 
 	"github.com/FZambia/sentinel"
 	"github.com/gomodule/redigo/redis"
-	"github.com/letsfire/redigo/mode"
 )
 
 type sentinelMode struct {
@@ -21,18 +21,16 @@ func (sm *sentinelMode) NewConn() (redis.Conn, error) {
 	return sm.pool.Dial()
 }
 
-func (sm *sentinelMode) String() string {
-	return "sentinel"
-}
+func (sm *sentinelMode) String() string { return "sentinel" }
 
-var _ mode.IMode = &sentinelMode{}
-
-func New(optFuncs ...OptFunc) *sentinelMode {
+func New(optFuncs ...OptFunc) redigo.ModeInterface {
 	opts := options{
-		addrs:      []string{"127.0.0.1:26379"},
+		addrs: []string{
+			"127.0.0.1:26379",
+		},
 		masterName: "mymaster",
-		poolOpts:   mode.DefaultPoolOpts(),
-		dialOpts:   mode.DefaultDialOpts(),
+		poolOpts:   redigo.DefaultPoolOpts(),
+		dialOpts:   redigo.DefaultDialOpts(),
 	}
 	for _, optFunc := range optFuncs {
 		optFunc(&opts)
@@ -44,7 +42,7 @@ func New(optFuncs ...OptFunc) *sentinelMode {
 		Addrs:      opts.addrs,
 		MasterName: opts.masterName,
 		Pool: func(addr string) *redis.Pool {
-			stp := &redis.Pool{
+			return &redis.Pool{
 				Wait:    true,
 				MaxIdle: runtime.GOMAXPROCS(0),
 				Dial: func() (redis.Conn, error) {
@@ -55,14 +53,13 @@ func New(optFuncs ...OptFunc) *sentinelMode {
 					return
 				},
 			}
-			return stp
 		},
 	}
 	pool := &redis.Pool{
-		Dial: func() (conn redis.Conn, err error) {
+		Dial: func() (redis.Conn, error) {
 			addr, err := st.MasterAddr()
 			if err != nil {
-				return
+				return nil, err
 			}
 			return redis.Dial("tcp", addr, opts.dialOpts...)
 		},
@@ -71,4 +68,8 @@ func New(optFuncs ...OptFunc) *sentinelMode {
 		poolOptFunc(pool)
 	}
 	return &sentinelMode{pool: pool}
+}
+
+func NewClient(optFuncs ...OptFunc) *redigo.Client {
+	return redigo.New(New(optFuncs...))
 }

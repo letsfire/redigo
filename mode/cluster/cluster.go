@@ -2,8 +2,8 @@ package cluster
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"github.com/letsfire/redigo/mode"
-	"github.com/letsfire/redisc"
+	"github.com/letsfire/redigo"
+	"github.com/mna/redisc"
 )
 
 type clusterMode struct {
@@ -18,20 +18,16 @@ func (cm *clusterMode) NewConn() (redis.Conn, error) {
 	return cm.rc.Dial()
 }
 
-func (cm *clusterMode) String() string {
-	return "cluster"
-}
+func (cm *clusterMode) String() string { return "cluster" }
 
-var _ mode.IMode = &clusterMode{}
-
-func New(optFuncs ...OptFunc) *clusterMode {
+func New(optFuncs ...OptFunc) redigo.ModeInterface {
 	opts := options{
 		nodes: []string{
 			"127.0.0.1:30001", "127.0.0.1:30002", "127.0.0.1:30003",
 			"127.0.0.1:30004", "127.0.0.1:30005", "127.0.0.1:30006",
 		},
-		dialOpts: mode.DefaultDialOpts(),
-		poolOpts: mode.DefaultPoolOpts(),
+		dialOpts: redigo.DefaultDialOpts(),
+		poolOpts: redigo.DefaultPoolOpts(),
 	}
 	for _, optFunc := range optFuncs {
 		optFunc(&opts)
@@ -39,6 +35,7 @@ func New(optFuncs ...OptFunc) *clusterMode {
 	rc := &redisc.Cluster{
 		StartupNodes: opts.nodes,
 		DialOptions:  opts.dialOpts,
+		PoolWaitTime: opts.waitTime,
 		CreatePool: func(address string, options ...redis.DialOption) (*redis.Pool, error) {
 			pool := &redis.Pool{
 				Dial: func() (redis.Conn, error) {
@@ -52,4 +49,8 @@ func New(optFuncs ...OptFunc) *clusterMode {
 		},
 	}
 	return &clusterMode{rc: rc}
+}
+
+func NewClient(optFuncs ...OptFunc) *redigo.Client {
+	return redigo.New(New(optFuncs...))
 }

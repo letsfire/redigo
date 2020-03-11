@@ -2,13 +2,13 @@ package sentinel
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"github.com/letsfire/redigo/mode"
+	"github.com/letsfire/redigo"
 )
 
 type options struct {
 	addrs            []string
 	masterName       string
-	poolOpts         []mode.PoolOption
+	poolOpts         []redigo.PoolOption
 	dialOpts         []redis.DialOption
 	sentinelDialOpts []redis.DialOption
 }
@@ -27,7 +27,7 @@ func MasterName(value string) OptFunc {
 	}
 }
 
-func PoolOpts(value ...mode.PoolOption) OptFunc {
+func PoolOpts(value ...redigo.PoolOption) OptFunc {
 	return func(opts *options) {
 		for _, poolOpt := range value {
 			opts.poolOpts = append(opts.poolOpts, poolOpt)

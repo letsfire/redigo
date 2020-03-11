@@ -2,43 +2,41 @@ package alone
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"github.com/letsfire/redigo/mode"
+	"github.com/letsfire/redigo"
 )
 
-type standAloneMode struct {
-	pool *redis.Pool
+type aloneMode struct{ pool redis.Pool }
+
+func (am *aloneMode) GetConn() redis.Conn {
+	return am.pool.Get()
 }
 
-func (sam *standAloneMode) GetConn() redis.Conn {
-	return sam.pool.Get()
+func (am *aloneMode) NewConn() (redis.Conn, error) {
+	return am.pool.Dial()
 }
 
-func (sam *standAloneMode) NewConn() (redis.Conn, error) {
-	return sam.pool.Dial()
-}
+func (am *aloneMode) String() string { return "alone" }
 
-func (sam *standAloneMode) String() string {
-	return "alone"
-}
-
-var _ mode.IMode = &standAloneMode{}
-
-func New(optFuncs ...OptFunc) *standAloneMode {
+func New(optFuncs ...OptFunc) redigo.ModeInterface {
 	opts := options{
 		addr:     "127.0.0.1:6379",
-		dialOpts: mode.DefaultDialOpts(),
-		poolOpts: mode.DefaultPoolOpts(),
+		dialOpts: redigo.DefaultDialOpts(),
+		poolOpts: redigo.DefaultPoolOpts(),
 	}
 	for _, optFunc := range optFuncs {
 		optFunc(&opts)
 	}
-	pool := &redis.Pool{
+	pool := redis.Pool{
 		Dial: func() (conn redis.Conn, e error) {
 			return redis.Dial("tcp", opts.addr, opts.dialOpts...)
 		},
 	}
 	for _, poolOptFunc := range opts.poolOpts {
-		poolOptFunc(pool)
+		poolOptFunc(&pool)
 	}
-	return &standAloneMode{pool: pool}
+	return &aloneMode{pool: pool}
+}
+
+func NewClient(optFuncs ...OptFunc) *redigo.Client {
+	return redigo.New(New(optFuncs...))
 }
