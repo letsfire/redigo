@@ -1,11 +1,12 @@
 package cluster
 
 import (
-	"github.com/gomodule/redigo/redis"
-	"github.com/stretchr/testify/assert"
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/gomodule/redigo/redis"
+	"github.com/stretchr/testify/assert"
 )
 
 var client = NewClient()
@@ -37,7 +38,7 @@ func BenchmarkAloneMode_Sub(b *testing.B) {
 				notifyChan <- struct{}{}
 			case redis.Message:
 				atomic.AddInt32(&counter, -1)
-				assert.Equal(b, message, msg.Data)
+				assert.EqualValues(b, message, msg.Data)
 			case error:
 				b.Errorf("receive failed, err = %s", msg)
 			}

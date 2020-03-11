@@ -1,0 +1,11 @@
+version: "3"
+networks:
+  redis_net:
+    driver: bridge
+services:
+  redis:
+    image: redis:5.0.7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      redis_net:
