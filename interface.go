@@ -29,5 +29,9 @@ func DefaultPoolOpts() []PoolOption {
 		Wait(false),
 		MaxIdle(2 * runtime.GOMAXPROCS(0)),
 		IdleTimeout(time.Second * 15),
+		TestOnBorrow(func(c redis.Conn, t time.Time) error {
+			_, err := c.Do("PING")
+			return err
+		}),
 	}
 }
