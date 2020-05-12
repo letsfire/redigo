@@ -1,9 +1,11 @@
 package cluster
 
 import (
-	"github.com/gomodule/redigo/redis"
-	"github.com/letsfire/redigo"
 	"time"
+
+	"github.com/gomodule/redigo/redis"
+
+	"github.com/letsfire/redigo/v2"
 )
 
 type options struct {

@@ -1,12 +1,13 @@
 package sentinel
 
 import (
-	"github.com/letsfire/redigo"
 	"runtime"
 	"time"
 
 	"github.com/FZambia/sentinel"
 	"github.com/gomodule/redigo/redis"
+
+	"github.com/letsfire/redigo/v2"
 )
 
 type sentinelMode struct {

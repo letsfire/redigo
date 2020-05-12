@@ -5,3 +5,7 @@
 | alone 单机模式               | 100%       | 100%       | [gomodule/redigo](https://github.com/gomodule/redigo)   |
 | sentinel 哨兵模式            | 100%       | 100%       | [FZambia/sentinel](https://github.com/FZambia/sentinel) |
 | cluster 集群模式             | 100%       | 100%       | [mna/redisc](https://github.com/mna/redisc)             |
+
+```text
+go get -u github.com/letsfire/redigo/v2
+```
