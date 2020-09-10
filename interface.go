@@ -16,6 +16,8 @@ type ModeInterface interface {
 // DefaultDialOpts 默认连接配置
 func DefaultDialOpts() []redis.DialOption {
 	return []redis.DialOption{
+		// 使用Go默认心跳间隔
+		redis.DialKeepAlive(time.Second * 15),
 		redis.DialConnectTimeout(time.Second),
 		redis.DialReadTimeout(time.Second * 3),
 		redis.DialWriteTimeout(time.Second * 3),
