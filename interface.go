@@ -2,7 +2,6 @@ package redigo
 
 import (
 	"fmt"
-	"runtime"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
@@ -26,9 +25,7 @@ func DefaultDialOpts() []redis.DialOption {
 // DefaultPoolOpts 默认连接池配置
 func DefaultPoolOpts() []PoolOption {
 	return []PoolOption{
-		Wait(false),
-		MaxIdle(2 * runtime.GOMAXPROCS(0)),
-		IdleTimeout(time.Second * 15),
+		Wait(true), MaxIdle(5),
 		TestOnBorrow(func(c redis.Conn, t time.Time) error {
 			_, err := c.Do("PING")
 			return err

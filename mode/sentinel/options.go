@@ -2,6 +2,7 @@ package sentinel
 
 import (
 	"github.com/gomodule/redigo/redis"
+
 	"github.com/letsfire/redigo/v2"
 )
 
@@ -43,7 +44,7 @@ func DialOpts(value ...redis.DialOption) OptFunc {
 	}
 }
 
-func SentinelDialOpts(value ...redis.DialOption) OptFunc {
+func DialSentinelOpts(value ...redis.DialOption) OptFunc {
 	return func(opts *options) {
 		for _, dialOpt := range value {
 			opts.sentinelDialOpts = append(opts.sentinelDialOpts, dialOpt)
