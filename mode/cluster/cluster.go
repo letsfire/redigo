@@ -19,6 +19,10 @@ func (cm *clusterMode) NewConn() (redis.Conn, error) {
 	return cm.rc.Dial()
 }
 
+func (cm *clusterMode) Close() error {
+	return cm.rc.Close()
+}
+
 func (cm *clusterMode) String() string { return "cluster" }
 
 func New(optFuncs ...OptFunc) redigo.ModeInterface {

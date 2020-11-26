@@ -22,6 +22,10 @@ func (sm *sentinelMode) NewConn() (redis.Conn, error) {
 	return sm.pool.Dial()
 }
 
+func (sm *sentinelMode) Close() error {
+	return sm.pool.Close()
+}
+
 func (sm *sentinelMode) String() string { return "sentinel" }
 
 func New(optFuncs ...OptFunc) redigo.ModeInterface {

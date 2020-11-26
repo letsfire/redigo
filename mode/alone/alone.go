@@ -16,6 +16,10 @@ func (am *aloneMode) NewConn() (redis.Conn, error) {
 	return am.pool.Dial()
 }
 
+func (am *aloneMode) Close() error {
+	return am.pool.Close()
+}
+
 func (am *aloneMode) String() string { return "alone" }
 
 func New(optFuncs ...OptFunc) redigo.ModeInterface {

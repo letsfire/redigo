@@ -2,12 +2,14 @@ package redigo
 
 import (
 	"fmt"
+	"io"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
 )
 
 type ModeInterface interface {
+	io.Closer
 	fmt.Stringer
 	GetConn() redis.Conn
 	NewConn() (redis.Conn, error)

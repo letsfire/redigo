@@ -24,6 +24,10 @@ func (c *Client) Mode() string {
 	return c.mode.String()
 }
 
+func (c *Client) Close() error {
+	return c.mode.Close()
+}
+
 func (c *Client) Execute(fn ExecuteFunc) (res interface{}, err error) {
 	conn := c.mode.GetConn()
 	defer conn.Close()
