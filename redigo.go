@@ -44,6 +44,14 @@ func (c *Client) Execute(fn ExecuteFunc) (res interface{}, err error) {
 	return
 }
 
+func (c *Client) MustExec(fun ExecuteFunc) interface{} {
+	res, err := c.Execute(fun)
+	if err != nil {
+		panic(err)
+	}
+	return res
+}
+
 func (c *Client) Subscribe(fn SubscribeFunc) error {
 	conn, err := c.mode.NewConn()
 	if err != nil {
