@@ -7,7 +7,7 @@ import (
 	"github.com/FZambia/sentinel"
 	"github.com/gomodule/redigo/redis"
 
-	"github.com/letsfire/redigo/v2"
+	"github.com/fat39/redigo/v2"
 )
 
 type sentinelMode struct {

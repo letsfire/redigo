@@ -4,7 +4,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/mna/redisc"
 
-	"github.com/letsfire/redigo/v2"
+	"github.com/fat39/redigo/v2"
 )
 
 type clusterMode struct {
