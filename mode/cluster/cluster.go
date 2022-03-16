@@ -53,6 +53,7 @@ func New(optFuncs ...OptFunc) redigo.ModeInterface {
 			return pool, nil
 		},
 	}
+	rc.Refresh()
 	return &clusterMode{rc: rc}
 }
 
