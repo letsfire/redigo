@@ -1,4 +1,4 @@
-module github.com/letsfire/redigo/v2
+module github.com/fat39/redigo/v2
 
 go 1.12
 
